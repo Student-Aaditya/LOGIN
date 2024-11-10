@@ -71,16 +71,24 @@ passport.deserializeUser(Users.deserializeUser());
 
 
 app.get("/sign",(req,res)=>{
+    try{
     res.render("index.ejs",{msg:req.flash("success")});
-})
+    }catch (error) {
+        res.status(500).send("Internal Server Error");
+      }
+});
 
 app.post("/sign",async(req,res)=>{
+    try{
     let {username,email,password}=req.body;
     const newusers= new Users({email,username});
     const regist=await Users.register(newusers,password);
     req.flash("success","successful register");
     console.log(regist);
     res.redirect("/sign");
+    }catch (error) {
+        res.status(500).send("Internal Server Error");
+      }
     // console.log(username);
 })
 
